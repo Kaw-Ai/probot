@@ -1,4 +1,0 @@
-hello
-weather in london
-square of 4
-bye
