@@ -5,7 +5,7 @@
 % Description:  Main entry point for chatbot program. Handles the main
 %               interface, parsing user input and generating responses.
 
-:- [map, database, route, pattern, readin, english, lib, names, skills_simple].
+:- [map, database, route, pattern, readin, english, lib, names, skills_simple, utility_skills, simple_browser_skills, simple_github_skills].
 :- use_module(library(random)).
 :- dynamic usr_name/1, usr_location/1, information/2, feedback/2, alevel/1, loc/1.
 
@@ -89,7 +89,47 @@ gen_reply(S, R):- % map to question
 	sentence(Tree1, Rep,[]),
 	append([yes, ','|Rep], ['!'], R).
 
-% GitHub Skills Handling
+% Simple Browser Skills Handling (moved up for priority)
+gen_reply(S, R):- % Simple navigation
+        pattern_simple_navigate(S, Url), !,
+        simple_navigate(Url, R).
+
+gen_reply(S, R):- % Simple screenshot
+        pattern_simple_screenshot(S), !,
+        simple_screenshot(R).
+
+gen_reply(S, R):- % Simple browser info
+        pattern_simple_browser_info(S, Type), !,
+        (   Type = title ->
+            simple_get_title(R)
+        ;   Type = url ->
+            simple_get_url(R)
+        ;   simple_get_title(R)
+        ).
+
+gen_reply(S, R):- % Simple browser close
+        (member(close, S), member(browser, S)), !,
+        simple_browser_close(R).
+
+% Simple GitHub Skills Handling (moved up for priority)
+gen_reply(S, R):- % Simple GitHub search
+        pattern_simple_github_search(S, Type, Query), !,
+        (   Type = repositories ->
+            simple_search_repositories(Query, R)
+        ;   Type = users ->
+            simple_search_users(Query, R)
+        ;   simple_search_repositories(Query, R)
+        ).
+
+gen_reply(S, R):- % Repository info
+        pattern_repo_info(S, Owner, Repo), !,
+        simple_get_repository_info(Owner, Repo, R).
+
+gen_reply(S, R):- % User repositories
+        pattern_user_repos(S, User), !,
+        simple_list_user_repos(User, R).
+
+% GitHub Skills Handling (original stubs)
 gen_reply(S, R):- % GitHub workflow operations
         pattern_github_workflow(S, Owner, Repo, Id), !,
         (   member(workflow, S) ->
@@ -166,9 +206,36 @@ gen_reply(S, R):- % Browser click actions
         pattern_browser_click(S, Element), !,
         browser_click(Element, R).
 
-gen_reply(S, R):- % Browser typing actions
+% Browser typing actions
+gen_reply(S, R):- 
         pattern_browser_type(S, Text), !,
         browser_type(Text, R).
+
+% Utility Skills Handling
+gen_reply(S, R):- % Time queries
+        pattern_time(S), !,
+        get_current_time(R).
+
+gen_reply(S, R):- % Help requests
+        pattern_help(S), !,
+        help(R).
+
+gen_reply(S, R):- % Basic arithmetic
+        pattern_math(S, Num1, Op, Num2), !,
+        basic_math(Num1, Op, Num2, R).
+
+gen_reply(S, R):- % Random facts
+        pattern_fact(S), !,
+        get_random_fact(R).
+
+gen_reply(S, R):- % Word counting
+        pattern_count_words(S, Words), !,
+        count_words(Words, R).
+
+gen_reply(S, R):- % Sentence reversal
+        pattern_reverse(S, Words), !,
+        reverse_sentence(Words, R).
+
 gen_reply(S, R):- % GitHub or browser help
         (member(github, S); member(browser, S); member(skills, S)), !,
         (   member(github, S) ->

@@ -190,5 +190,14 @@ responses_db(skill_demo, [
         ['Try saying "list issues from owner/repo" or "take screenshot"'],
         ['You can ask me to "get pull request 123 from owner/repo"'],
         ['Try "search repositories for keyword" or "navigate to google.com"'],
-        ['I understand commands like "click button" or "list branches from owner/repo"']
+        ['I understand commands like "click button" or "list branches from owner/repo"'],
+        ['Ask me "what time is it" or "calculate 2 plus 3"'],
+        ['Try "help" to see all available commands']
+        ]).
+
+% Utility skill responses
+responses_db(utility_help, [
+        ['I can tell you the time, do basic math, share random facts, and more!'],
+        ['Ask me for help, the current time, to calculate something, or for a fun fact!'],
+        ['I can count words, reverse sentences, and perform basic calculations.']
         ]).
