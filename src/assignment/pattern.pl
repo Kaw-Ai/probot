@@ -265,3 +265,98 @@ pattern_user_repos([repos, for, User |_], User):-!.
 pattern_user_repos([User, repositories |_], User):-!.
 pattern_user_repos([_|T], User):-
         pattern_user_repos(T, User).
+
+% Extended Utility Skills Pattern Matching
+
+% pattern_weather/2
+%
+% Matches weather queries.
+pattern_weather([weather, in, Location |_], Location):-!.
+pattern_weather([weather, for, Location |_], Location):-!.
+pattern_weather([what, is, the, weather, in, Location |_], Location):-!.
+pattern_weather([weather, Location |_], Location):-!.
+pattern_weather([_|T], Location):-
+        pattern_weather(T, Location).
+
+% pattern_advanced_math/3
+%
+% Matches advanced mathematical operations with one number.
+pattern_advanced_math([Operation, of, nb(Num) |_], Operation, Num):-
+        member(Operation, [square, cube, sqrt, factorial, abs]), !.
+pattern_advanced_math([Operation, nb(Num) |_], Operation, Num):-
+        member(Operation, [square, cube, sqrt, factorial, abs]), !.
+pattern_advanced_math([nb(Num), Operation |_], Operation, Num):-
+        member(Operation, [square, cube, sqrt, factorial, abs]), !.
+pattern_advanced_math([_|T], Operation, Num):-
+        pattern_advanced_math(T, Operation, Num).
+
+% pattern_advanced_math/4
+%
+% Matches advanced mathematical operations with two numbers.
+pattern_advanced_math([nb(Num1), Operation, nb(Num2) |_], Operation, Num1, Num2):-
+        member(Operation, [power, mod, max, min]), !.
+pattern_advanced_math([Operation, nb(Num1), nb(Num2) |_], Operation, Num1, Num2):-
+        member(Operation, [power, mod, max, min]), !.
+pattern_advanced_math([Operation, of, nb(Num1), nb(Num2) |_], Operation, Num1, Num2):-
+        member(Operation, [max, min]), !.
+pattern_advanced_math([_|T], Operation, Num1, Num2):-
+        pattern_advanced_math(T, Operation, Num1, Num2).
+
+% pattern_file_info/2
+%
+% Matches file information requests.
+pattern_file_info([file, info, FileName |_], FileName):-!.
+pattern_file_info([info, about, file, FileName |_], FileName):-!.
+pattern_file_info([get, file, info, FileName |_], FileName):-!.
+pattern_file_info([_|T], FileName):-
+        pattern_file_info(T, FileName).
+
+% pattern_list_directory/2
+%
+% Matches directory listing requests.
+pattern_list_directory([list, directory, DirName |_], DirName):-!.
+pattern_list_directory([list, dir, DirName |_], DirName):-!.
+pattern_list_directory([show, directory, DirName |_], DirName):-!.
+pattern_list_directory([ls, DirName |_], DirName):-!.
+pattern_list_directory([_|T], DirName):-
+        pattern_list_directory(T, DirName).
+
+% pattern_write_note/3
+%
+% Matches note writing requests.
+pattern_write_note([write, note, to, FileName |Content], FileName, Content):-!.
+pattern_write_note([save, note, FileName |Content], FileName, Content):-!.
+pattern_write_note([create, note, FileName |Content], FileName, Content):-!.
+pattern_write_note([_|T], FileName, Content):-
+        pattern_write_note(T, FileName, Content).
+
+% pattern_convert_units/4
+%
+% Matches unit conversion requests.
+pattern_convert_units([convert, nb(Value), FromUnit, to, ToUnit |_], Value, FromUnit, ToUnit):-!.
+pattern_convert_units([nb(Value), FromUnit, to, ToUnit |_], Value, FromUnit, ToUnit):-!.
+pattern_convert_units([_|T], Value, FromUnit, ToUnit):-
+        pattern_convert_units(T, Value, FromUnit, ToUnit).
+
+% pattern_count_characters/2
+%
+% Matches character counting requests.
+pattern_count_characters([count, characters, in |Rest], Rest):-!.
+pattern_count_characters([how, many, characters, in |Rest], Rest):-!.
+pattern_count_characters([character, count |Rest], Rest):-!.
+pattern_count_characters([_|T], Text):-
+        pattern_count_characters(T, Text).
+
+% pattern_text_case/3
+%
+% Matches text case conversion requests.
+pattern_text_case([uppercase |Rest], uppercase, Rest):-!.
+pattern_text_case([to, uppercase |Rest], uppercase, Rest):-!.
+pattern_text_case([make, uppercase |Rest], uppercase, Rest):-!.
+pattern_text_case([convert, to, uppercase |Rest], uppercase, Rest):-!.
+pattern_text_case([lowercase |Rest], lowercase, Rest):-!.
+pattern_text_case([to, lowercase |Rest], lowercase, Rest):-!.
+pattern_text_case([make, lowercase |Rest], lowercase, Rest):-!.
+pattern_text_case([convert, to, lowercase |Rest], lowercase, Rest):-!.
+pattern_text_case([_|T], Case, Text):-
+        pattern_text_case(T, Case, Text).

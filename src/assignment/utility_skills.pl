@@ -16,8 +16,12 @@ get_current_time(Result) :-
 help(Result) :-
     Result = ['Available commands:', 
               'Time: "what time is it"',
-              'Math: "calculate 2 plus 3", "5 minus 2"', 
+              'Math: "calculate 2 plus 3", "5 minus 2", "square of 4", "10 power 3"', 
               'Facts: "random fact", "fun fact"',
+              'Weather: "weather in london", "weather for paris"',
+              'Files: "file info chat.pl", "list directory src", "write note test.txt hello"',
+              'Units: "convert 32 fahrenheit to celsius", "10 meters to feet"',
+              'Text: "count characters in hello", "uppercase hello world"',
               'GitHub: "search repositories for python", "search users for github"',
               'Browser: "navigate to google.com", "take screenshot", "get title"',
               'Utils: "count words in hello world", "reverse hello world"',
