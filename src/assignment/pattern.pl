@@ -62,3 +62,87 @@ pattern_me([you, ok, X |_], X):-!.
 pattern_me([you, okay, X |_], X):-!.
 pattern_me([_|T], X):-
         pattern_me(T, X).
+
+% GitHub Skills Pattern Matching
+
+% pattern_github_workflow/4
+%
+% Matches GitHub workflow-related commands.
+pattern_github_workflow([get, workflow, run, RunId, from, Owner, repo, Repo |_], Owner, Repo, RunId):-!.
+pattern_github_workflow([download, artifact, ArtifactId, from, Owner, repo, Repo |_], Owner, Repo, ArtifactId):-!.
+pattern_github_workflow([list, workflows, from, Owner, repo, Repo |_], Owner, Repo, _):-!.
+pattern_github_workflow([_|T], Owner, Repo, Id):-
+        pattern_github_workflow(T, Owner, Repo, Id).
+
+% pattern_github_issue/4  
+%
+% Matches GitHub issue-related commands.
+pattern_github_issue([get, issue, Number, from, Owner, repo, Repo |_], Owner, Repo, Number):-!.
+pattern_github_issue([list, issues, from, Owner, repo, Repo |_], Owner, Repo, _):-!.
+pattern_github_issue([show, issue, Number, from, Owner, repo, Repo |_], Owner, Repo, Number):-!.
+pattern_github_issue([_|T], Owner, Repo, Number):-
+        pattern_github_issue(T, Owner, Repo, Number).
+
+% pattern_github_pr/4
+%
+% Matches GitHub pull request-related commands.
+pattern_github_pr([get, pull, request, Number, from, Owner, repo, Repo |_], Owner, Repo, Number):-!.
+pattern_github_pr([get, pr, Number, from, Owner, repo, Repo |_], Owner, Repo, Number):-!.
+pattern_github_pr([list, pull, requests, from, Owner, repo, Repo |_], Owner, Repo, _):-!.
+pattern_github_pr([show, pr, Number, from, Owner, repo, Repo |_], Owner, Repo, Number):-!.
+pattern_github_pr([_|T], Owner, Repo, Number):-
+        pattern_github_pr(T, Owner, Repo, Number).
+
+% pattern_github_repo/3
+%
+% Matches GitHub repository-related commands.
+pattern_github_repo([list, branches, from, Owner, repo, Repo |_], Owner, Repo):-!.
+pattern_github_repo([list, commits, from, Owner, repo, Repo |_], Owner, Repo):-!.
+pattern_github_repo([list, tags, from, Owner, repo, Repo |_], Owner, Repo):-!.
+pattern_github_repo([get, file, _, from, Owner, repo, Repo |_], Owner, Repo):-!.
+pattern_github_repo([_|T], Owner, Repo):-
+        pattern_github_repo(T, Owner, Repo).
+
+% pattern_github_search/2
+%
+% Matches GitHub search commands.
+pattern_github_search([search, code, for, Query |_], Query):-!.
+pattern_github_search([search, issues, for, Query |_], Query):-!.
+pattern_github_search([search, repositories, for, Query |_], Query):-!.
+pattern_github_search([search, users, for, Query |_], Query):-!.
+pattern_github_search([_|T], Query):-
+        pattern_github_search(T, Query).
+
+% Browser Skills Pattern Matching
+
+% pattern_browser_action/2
+%
+% Matches browser action commands.
+pattern_browser_action([close, browser |_], close):-!.
+pattern_browser_action([browser, close |_], close):-!.
+pattern_browser_action([take, screenshot |_], screenshot):-!.
+pattern_browser_action([browser, screenshot |_], screenshot):-!.
+pattern_browser_action([navigate, to, Url |_], navigate(Url)):-!.
+pattern_browser_action([go, to, Url |_], navigate(Url)):-!.
+pattern_browser_action([browser, back |_], back):-!.
+pattern_browser_action([go, back |_], back):-!.
+pattern_browser_action([_|T], Action):-
+        pattern_browser_action(T, Action).
+
+% pattern_browser_click/2
+%
+% Matches browser click commands.
+pattern_browser_click([click, on, Element |_], Element):-!.
+pattern_browser_click([click, Element |_], Element):-!.
+pattern_browser_click([browser, click, Element |_], Element):-!.
+pattern_browser_click([_|T], Element):-
+        pattern_browser_click(T, Element).
+
+% pattern_browser_type/2
+%
+% Matches browser text input commands.
+pattern_browser_type([type, Text |_], Text):-!.
+pattern_browser_type([browser, type, Text |_], Text):-!.
+pattern_browser_type([enter, text, Text |_], Text):-!.
+pattern_browser_type([_|T], Text):-
+        pattern_browser_type(T, Text).
