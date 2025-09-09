@@ -146,3 +146,122 @@ pattern_browser_type([browser, type, Text |_], Text):-!.
 pattern_browser_type([enter, text, Text |_], Text):-!.
 pattern_browser_type([_|T], Text):-
         pattern_browser_type(T, Text).
+
+% Utility Skills Pattern Matching
+
+% pattern_time/1
+%
+% Matches time-related queries.
+pattern_time([what, time, is, it |_]):-!.
+pattern_time([what, is, the, time |_]):-!.
+pattern_time([current, time |_]):-!.
+pattern_time([time |_]):-!.
+pattern_time([_|T]):-
+        pattern_time(T).
+
+% pattern_help/1
+%
+% Matches help requests.
+pattern_help([help |_]):-!.
+pattern_help([what, can, you, do |_]):-!.
+pattern_help([commands |_]):-!.
+pattern_help([skills |_]):-!.
+pattern_help([_|T]):-
+        pattern_help(T).
+
+% pattern_math/4
+%
+% Matches basic arithmetic expressions.
+pattern_math([calculate, nb(Num1), Op, nb(Num2) |_], Num1, Op, Num2):-!.
+pattern_math([nb(Num1), Op, nb(Num2) |_], Num1, Op, Num2):-
+        member(Op, [plus, minus, times, multiply, divided, divide]), !.
+pattern_math([_|T], Num1, Op, Num2):-
+        pattern_math(T, Num1, Op, Num2).
+
+% pattern_fact/1
+%
+% Matches requests for random facts.
+pattern_fact([random, fact |_]):-!.
+pattern_fact([fun, fact |_]):-!.
+pattern_fact([interesting, fact |_]):-!.
+pattern_fact([tell, me, a, fact |_]):-!.
+pattern_fact([_|T]):-
+        pattern_fact(T).
+
+% pattern_count_words/2
+%
+% Matches word counting requests.
+pattern_count_words([count, words, in |Rest], Rest):-!.
+pattern_count_words([how, many, words, in |Rest], Rest):-!.
+pattern_count_words([_|T], Words):-
+        pattern_count_words(T, Words).
+
+% pattern_reverse/2
+%
+% Matches sentence reversal requests.
+pattern_reverse([reverse |Rest], Rest):-!.
+pattern_reverse([reverse, sentence |Rest], Rest):-!.
+pattern_reverse([_|T], Words):-
+        pattern_reverse(T, Words).
+
+% Simple Browser Skills Pattern Matching
+
+% pattern_simple_navigate/2
+%
+% Matches simple navigation commands.
+pattern_simple_navigate([navigate, to, Url |_], Url):-!.
+pattern_simple_navigate([go, to, Url |_], Url):-!.
+pattern_simple_navigate([visit, Url |_], Url):-!.
+pattern_simple_navigate([_|T], Url):-
+        pattern_simple_navigate(T, Url).
+
+% pattern_simple_screenshot/1
+%
+% Matches screenshot commands.
+pattern_simple_screenshot([screenshot |_]):-!.
+pattern_simple_screenshot([take, screenshot |_]):-!.
+pattern_simple_screenshot([capture, screen |_]):-!.
+pattern_simple_screenshot([_|T]):-
+        pattern_simple_screenshot(T).
+
+% pattern_simple_browser_info/1
+%
+% Matches requests for browser information.
+pattern_simple_browser_info([get, title |_], title):-!.
+pattern_simple_browser_info([page, title |_], title):-!.
+pattern_simple_browser_info([current, url |_], url):-!.
+pattern_simple_browser_info([get, url |_], url):-!.
+pattern_simple_browser_info([_|T], Type):-
+        pattern_simple_browser_info(T, Type).
+
+% Simple GitHub Skills Pattern Matching
+
+% pattern_simple_github_search/3
+%
+% Matches GitHub search commands.
+pattern_simple_github_search([search, repositories, for, Query |_], repositories, Query):-!.
+pattern_simple_github_search([search, repos, for, Query |_], repositories, Query):-!.
+pattern_simple_github_search([search, users, for, Query |_], users, Query):-!.
+pattern_simple_github_search([find, repositories, Query |_], repositories, Query):-!.
+pattern_simple_github_search([find, users, Query |_], users, Query):-!.
+pattern_simple_github_search([_|T], Type, Query):-
+        pattern_simple_github_search(T, Type, Query).
+
+% pattern_repo_info/3
+%
+% Matches repository information requests.
+pattern_repo_info([info, for, Owner, '/', Repo |_], Owner, Repo):-!.
+pattern_repo_info([repository, info, Owner, '/', Repo |_], Owner, Repo):-!.
+pattern_repo_info([get, info, Owner, '/', Repo |_], Owner, Repo):-!.
+pattern_repo_info([info, for, Repo, from, Owner |_], Owner, Repo):-!.
+pattern_repo_info([_|T], Owner, Repo):-
+        pattern_repo_info(T, Owner, Repo).
+
+% pattern_user_repos/2
+%
+% Matches user repository listing requests.  
+pattern_user_repos([list, repos, for, User |_], User):-!.
+pattern_user_repos([repos, for, User |_], User):-!.
+pattern_user_repos([User, repositories |_], User):-!.
+pattern_user_repos([_|T], User):-
+        pattern_user_repos(T, User).

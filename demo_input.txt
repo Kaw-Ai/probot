@@ -1,0 +1,15 @@
+hello
+what time is it
+help
+calculate 15 plus 27
+calculate 100 divided 4
+random fact
+fun fact
+take screenshot
+navigate to github.com
+get title
+search repositories for machine learning  
+search users for microsoft
+count words in this is a test sentence
+reverse hello world goodbye
+bye
