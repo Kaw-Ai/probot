@@ -5,7 +5,7 @@
 % Description:  Main entry point for chatbot program. Handles the main
 %               interface, parsing user input and generating responses.
 
-:- [map, database, route, pattern, readin, english, lib, names].
+:- [map, database, route, pattern, readin, english, lib, names, skills_simple].
 :- use_module(library(random)).
 :- dynamic usr_name/1, usr_location/1, information/2, feedback/2, alevel/1, loc/1.
 
@@ -88,6 +88,96 @@ gen_reply(S, R):- % map to question
 	mapping(s2q,Tree1, Tree2),
 	sentence(Tree1, Rep,[]),
 	append([yes, ','|Rep], ['!'], R).
+
+% GitHub Skills Handling
+gen_reply(S, R):- % GitHub workflow operations
+        pattern_github_workflow(S, Owner, Repo, Id), !,
+        (   member(workflow, S) ->
+            (   member(download, S) ->
+                download_workflow_run_artifact(Owner, Repo, Id, R)
+            ;   member(get, S) ->
+                get_workflow_run(Owner, Repo, Id, R)
+            ;   list_workflows(Owner, Repo, R)
+            )
+        ;   member(artifact, S) ->
+            download_workflow_run_artifact(Owner, Repo, Id, R)
+        ;   list_workflows(Owner, Repo, R)
+        ).
+
+gen_reply(S, R):- % GitHub issue operations  
+        pattern_github_issue(S, Owner, Repo, Number), !,
+        (   member(get, S); member(show, S) ->
+            get_issue(Owner, Repo, Number, R)
+        ;   member(list, S) ->
+            list_issues(Owner, Repo, R)
+        ;   get_issue(Owner, Repo, Number, R)
+        ).
+
+gen_reply(S, R):- % GitHub pull request operations
+        pattern_github_pr(S, Owner, Repo, Number), !,
+        (   member(get, S); member(show, S) ->
+            get_pull_request(Owner, Repo, Number, R)
+        ;   member(list, S) ->
+            list_pull_requests(Owner, Repo, R)
+        ;   get_pull_request(Owner, Repo, Number, R)
+        ).
+
+gen_reply(S, R):- % GitHub repository operations
+        pattern_github_repo(S, Owner, Repo), !,
+        (   member(branches, S) ->
+            list_branches(Owner, Repo, R)
+        ;   member(commits, S) ->
+            list_commits(Owner, Repo, R)
+        ;   member(tags, S) ->
+            list_tags(Owner, Repo, R)
+        ;   member(file, S) ->
+            get_file_contents(Owner, Repo, 'README.md', R)
+        ;   list_branches(Owner, Repo, R)
+        ).
+
+gen_reply(S, R):- % GitHub search operations
+        pattern_github_search(S, Query), !,
+        (   member(code, S) ->
+            search_code(Query, R)
+        ;   member(issues, S) ->
+            search_issues(Query, R)
+        ;   member(repositories, S) ->
+            search_repositories(Query, R)
+        ;   member(users, S) ->
+            search_users(Query, R)
+        ;   search_repositories(Query, R)
+        ).
+
+% Browser Skills Handling
+gen_reply(S, R):- % Browser actions
+        pattern_browser_action(S, Action), !,
+        (   Action = close ->
+            browser_close(R)
+        ;   Action = screenshot ->
+            browser_take_screenshot(R)
+        ;   Action = navigate(Url) ->
+            browser_navigate(Url, R)
+        ;   Action = back ->
+            browser_navigate_back(R)
+        ;   browser_take_screenshot(R)
+        ).
+
+gen_reply(S, R):- % Browser click actions
+        pattern_browser_click(S, Element), !,
+        browser_click(Element, R).
+
+gen_reply(S, R):- % Browser typing actions
+        pattern_browser_type(S, Text), !,
+        browser_type(Text, R).
+gen_reply(S, R):- % GitHub or browser help
+        (member(github, S); member(browser, S); member(skills, S)), !,
+        (   member(github, S) ->
+            responses_db(github_help, D)
+        ;   member(browser, S) ->
+            responses_db(browser_help, D)  
+        ;   responses_db(skill_demo, D)
+        ),
+        random_pick(D, R).
 
 %gen_reply(S, R):- % experimental!
 %        question(Tree2, S, _Rest), !, 

@@ -5,6 +5,8 @@
 % Description:  Contains databases for general use throughout the chatbot
 %               program.
 
+:- discontiguous responses_db/2.
+
 responses_db(bye, [
         ['Bye!'], 
         ['Hope to see you again.'], 
@@ -169,4 +171,24 @@ alevel_db([maths,
         german,
         music,
         computing
+        ]).
+
+% Skill-related responses
+responses_db(github_help, [
+        ['I can help you with GitHub operations like getting issues, pull requests, workflows, and more!'],
+        ['I have GitHub skills! Try asking me to list issues, get pull requests, or search repositories.'],
+        ['I can work with GitHub APIs - just tell me what repository you want to explore.']
+        ]).
+
+responses_db(browser_help, [
+        ['I can help you with browser automation - taking screenshots, clicking elements, navigating pages!'],
+        ['I have browser skills! I can navigate, click, type, and take screenshots.'],
+        ['I can automate web browsers for you - just tell me what you need to do.']
+        ]).
+
+responses_db(skill_demo, [
+        ['Try saying "list issues from owner/repo" or "take screenshot"'],
+        ['You can ask me to "get pull request 123 from owner/repo"'],
+        ['Try "search repositories for keyword" or "navigate to google.com"'],
+        ['I understand commands like "click button" or "list branches from owner/repo"']
         ]).
