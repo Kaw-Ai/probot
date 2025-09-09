@@ -5,7 +5,7 @@
 % Description:  Main entry point for chatbot program. Handles the main
 %               interface, parsing user input and generating responses.
 
-:- [map, database, route, pattern, readin, english, lib, names, skills_simple, utility_skills, simple_browser_skills, simple_github_skills].
+:- [map, database, route, pattern, readin, english, lib, names, skills_simple, utility_skills, simple_browser_skills, simple_github_skills, extended_utility_skills].
 :- use_module(library(random)).
 :- dynamic usr_name/1, usr_location/1, information/2, feedback/2, alevel/1, loc/1.
 
@@ -235,6 +235,48 @@ gen_reply(S, R):- % Word counting
 gen_reply(S, R):- % Sentence reversal
         pattern_reverse(S, Words), !,
         reverse_sentence(Words, R).
+
+% Extended Utility Skills Handling
+gen_reply(S, R):- % Weather information
+        pattern_weather(S, Location), !,
+        get_weather(Location, R).
+
+gen_reply(S, R):- % Advanced math - single number operations
+        pattern_advanced_math(S, Operation, Num), !,
+        advanced_math(Operation, Num, R).
+
+gen_reply(S, R):- % Advanced math - two number operations
+        pattern_advanced_math(S, Operation, Num1, Num2), !,
+        advanced_math(Operation, Num1, Num2, R).
+
+gen_reply(S, R):- % File information
+        pattern_file_info(S, FileName), !,
+        read_file_info(FileName, R).
+
+gen_reply(S, R):- % Directory listing
+        pattern_list_directory(S, DirName), !,
+        list_directory(DirName, R).
+
+gen_reply(S, R):- % Write note
+        pattern_write_note(S, FileName, Content), !,
+        write_note(FileName, Content, R).
+
+gen_reply(S, R):- % Unit conversions
+        pattern_convert_units(S, Value, FromUnit, ToUnit), !,
+        convert_units(Value, FromUnit, ToUnit, R).
+
+gen_reply(S, R):- % Character counting
+        pattern_count_characters(S, Text), !,
+        count_characters(Text, R).
+
+gen_reply(S, R):- % Text case conversion
+        pattern_text_case(S, Case, Text), !,
+        (   Case = uppercase ->
+            to_uppercase(Text, R)
+        ;   Case = lowercase ->
+            to_lowercase(Text, R)
+        ;   R = ['Unknown case conversion:', Case]
+        ).
 
 gen_reply(S, R):- % GitHub or browser help
         (member(github, S); member(browser, S); member(skills, S)), !,

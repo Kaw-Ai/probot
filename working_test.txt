@@ -1,0 +1,5 @@
+hello
+weather in london
+square of 4
+convert 32 fahrenheit to celsius
+bye
